@@ -1,0 +1,100 @@
+#!/bin/bash
+# Apache LogFile Analyzer
+# Coded by ksrvco
+# Coded for Linux Platforms
+# Graphical mode
+# Coded on Parrot Security OS
+# sudo apt install zenity > /dev/null 2>&1
+rm -rf /tmp/2.txt
+touch /opt/user.txt
+date >> /opt/user.txt
+echo -e "--------------------------------------------------------------------------------
+    FirstName | LastName | Username | Mem-Of-Group | ID | Year | Month | Day
+--------------------------------------------------------------------------------" >> /opt/user.txt
+reset
+zenity --info --title="Information About Tool" --text="In the name of god\n\n\n \
+					[+] Tool name : Apache LogFile Analyzer \n\n \
+					[+] Coded by : ksrvco \n\n \
+					[+] Version : 2.0 \n\n \
+					[+] Email : flower.k2000 [at] gmail.com \n\n \
+					[+] Tested on : Debian Base Linux Operation Systems \n\n \
+					[+] Type of Share : Open Source \n\n \
+					[+] Tested on WebServer : Apache \n\n \
+					[+] About :\n\n \
+					With this tool you can analyze apache log files on your servers.\n" 2> /tmp/2.txt
+sleep 1
+userinfo=$(zenity --forms --title="Complete this form for using this tool" --text="Register some your information" \
+   --add-entry="First Name" \
+   --add-entry="Last Name" \
+   --add-entry="Username" \
+   --add-entry="Member of group" \
+   --add-entry="User ID" \
+   --add-entry="Year" \
+   --add-entry="Month" \
+   --add-entry="Day" 2> /tmp/2.txt)
+echo $userinfo >> /opt/user.txt
+echo -e "\n\n\n" >> /opt/user.txt
+echo ""
+echo -e "\e[31m ---------------------------------------------------------\e[0m"
+echo -e "\e[31m         Apache Log File Analyzer By ksrvco\e[0m"
+echo -e "\e[31m ---------------------------------------------------------\e[0m"
+	echo ""
+	echo ""
+	echo " Options: "
+	echo "     [1] View LogFile"
+	echo "     [2] View IP addresses into log file"
+	echo "     [3] View Each IP access to the server is multiple times"
+	echo "     [4] What is an IP path"
+	echo "     [5] Reset"
+	echo ""
+	sleep 1
+	selection=$(zenity --entry --title="Get Option" --text="Choose an option : " 2> /tmp/2.txt)
+		if [ $selection == "1" ]
+			then
+			log=$(zenity --title="Search and Choose your apache log file" --file-selection --file-filter="*.txt" --file-filter="*.log" --file-filter="*.master" --file-filter="*.html" 2> /tmp/2.txt)
+			clear
+			cat $log > /home/ViewLog.txt
+			clear
+			zenity --info --title="Completed Successfully" --text="Your result saved on /home/ViewLog.txt " 2> /tmp/2.txt
+			sleep 6
+		elif [ $selection == "2" ]
+			then
+			ip=$(zenity --title="Search and Choose your apache log file" --file-selection --file-filter="*.txt" --file-filter="*.log" --file-filter="*.master" --file-filter="*.html" 2> /tmp/2.txt)
+			clear
+			cat $ip | cut -d  " "  -f 1 | sort  -u > /home/IP_Log.txt
+			clear
+			zenity --info --title="Completed Successfully" --text="Your result saved on /home/IP_Log.txt " 2> /tmp/2.txt
+			sleep 6
+		elif [ $selection == "3" ]
+			then
+			ipaddress=$(zenity --title="Search and Choose your apache log file" --file-selection --file-filter="*.txt" --file-filter="*.log" --file-filter="*.master" --file-filter="*.html" 2> /tmp/2.txt)
+			clear
+			cat $ipaddress | cut -d " "  -f 1 | sort | uniq -c | sort -urn > /home/IP_Log2.txt
+			clear
+			zenity --info --title="Completed Successfully" --text="Your result saved on /home/IP_Log2.txt " 2> /tmp/2.txt
+			sleep 6
+		elif [ $selection == "4" ]
+			then
+			ippath=$(zenity --title="Search and Choose your apache log file" --file-selection --file-filter="*.txt" --file-filter="*.log" --file-filter="*.master" --file-filter="*.html" 2> /tmp/2.txt)
+			addr=$(zenity --entry --title="Get IP" --text="Enter IP Address : " 2> /tmp/2.txt)
+			clear
+			cat $ippath | grep $addr  | cut -d  "\""  -f  2  |  uniq  -c > /home/IP_Path.txt
+			clear
+			zenity --info --title="Completed Successfully" --text="Your result saved on /home/IP_Path.txt " 2> /tmp/2.txt
+			sleep 6
+		elif [ $selection == "5" ]
+			then
+			rm -rf /tmp/2.txt
+			cd /home
+			rm -rf IP_Path.txt IP_Log2.txt IP_Log.txt ViewLog.txt
+			clear
+			zenity --info --title="Cache Cleaned!" --text="This tool reseted successfully." 2> /tmp/2.txt
+			rm -rf /tmp/2.txt
+			sleep 3
+		else
+			clear
+			echo ""
+			zenity --info --title="Error!" --text="Wrong Selection \nTry again." 2> /tmp/2.txt
+			echo ""
+		fi
+exit
