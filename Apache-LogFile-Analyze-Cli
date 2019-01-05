@@ -1,0 +1,68 @@
+#!/bin/bash
+# Apache LogFile Analyzer
+# Coded by ksrvco
+# CLI Mode
+# Coded for Linux Operation systems
+reset
+echo ""
+echo -e "\e[31m [+] In the name of god\e[0m"
+echo -e "\e[31m [+] Tool Name: Apache Log File Analyzer\e[0m"
+echo -e "\e[31m [+] Coded by: ksrvco\e[0m"
+echo -e "\e[31m [+] Tested On: Ubuntu Server\e[0m"
+echo -e "\e[31m [+] Contact me: flower.k2000@gmail.com\e[0m"
+	echo ""
+	echo ""
+	echo " Options: "
+	echo "     [1] View LogFile"
+	echo "     [2] View IP addresses into log file"
+	echo "     [3] View Each IP access to the server is multiple times"
+	echo "     [4] What is an IP path"
+	echo "     [5] Reset"
+	echo ""
+	read -p " [>] Please choose an option: " selection
+		if [ $selection == "1" ]
+			then
+			read -p " Put your apache log file here: " log
+			clear
+			cat $log > /home/ViewLog.txt
+			clear
+			echo " Result saved into ViewLog.txt file on home directory"
+			sleep 6
+		elif [ $selection == "2" ]
+			then
+			read -p " Put your apache log file here: " ip
+			clear
+			cat $ip | cut -d  " "  -f 1 | sort  -u > /home/IP_Log.txt
+			clear
+			echo " Result saved into IP_Log.txt file on home directory"
+			sleep 6
+		elif [ $selection == "3" ]
+			then
+			read -p " Put your apache log file here: " ipaddress
+			clear
+			cat $ipaddress | cut -d " "  -f 1 | sort | uniq -c | sort -urn > /home/IP_Log2.txt
+			clear
+			echo " Result saved into IP_Log2.txt file on home directory"
+			sleep 6
+		elif [ $selection == "4" ]
+			then
+			read -p " Put your apache log file here: " ippath
+			read -p " Put ip address here: " addr
+			clear
+			cat $ippath | grep $addr  | cut -d  "\""  -f  2  |  uniq  -c > /home/IP_Path.txt
+			clear
+			echo " Result saved into IP_Path.txt file on home directory"
+			sleep 6
+		elif [ $selection == "5" ]
+			then
+			cd /home
+			rm -rf IP_Path.txt IP_Log2.txt IP_Log.txt ViewLog.txt
+			clear
+			sleep 5
+		else 
+			clear
+			echo ""
+			echo " Wrong Selection!"
+			echo ""
+		fi
+exit
